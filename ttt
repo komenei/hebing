@@ -1,0 +1,21 @@
+方案一：
+目标虚机不方便配置为jenkins从节点，则使用一个从节点，通过Ansibble远程执行脚本在目标虚机上实现下载、卸载、安装等步骤。
+
+使用pipeline完成，主要分为几个阶段：
+
+1，环境准备：环境变量初始化，清空工作目录
+
+2. 通过Ansible，将get_tool.py拷贝至目标虚机上，并运行脚本，将deploy_tools库拉至本地（目录/home/ubuntu/）
+
+3. 调用deploy_tools库下的工具deploy_alpha_version.py脚本，输入需要下载的UME版本制品库路径（制品库上ume-alpha-generic后开始的路径）和解压的目前文件夹（默认/paasdata下）进行版本下载。
+
+4. 调用deploy_tools库下的工具deploy_alpha_version.py脚本，进行ume的卸载。
+
+5. 调用deploy_tools库下的工具deploy_alpha_version.py脚本，进行ume的卸载。
+
+脚本参数说明：
+-：UME版本制品库路径（制品库上ume-alpha-generic后开始的路径）
+-VERSION：tar.gz下的文件夹名
+-HOME：版本下载位置，也是解压后的位置
+-INSTALL：是否执行安装步骤（boolean）
+-STEP：所要执行的步骤。all是全流程（下载解压卸载安装），download是下载，untar是解压，uninstall是卸载，install是安装
